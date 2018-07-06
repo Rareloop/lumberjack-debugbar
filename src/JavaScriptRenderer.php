@@ -15,6 +15,7 @@ class JavaScriptRenderer extends BaseJavaScriptRenderer
         parent::__construct($debugBar, $baseUrl, $basePath);
 
         $this->cssVendors['fontawesome'] = __DIR__ . '/Resources/vendor/font-awesome.css';
+        $this->cssVendors['lumberjack'] = __DIR__ . '/Resources/lumberjack.css';
     }
 
     public function getCssAssetsDump()

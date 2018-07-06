@@ -53,6 +53,13 @@ class DebugBar extends StandardDebugBar
         }
     }
 
+    public function addTwigTemplate($name, $context)
+    {
+        if ($this->hasCollector('twig')) {
+            $this['twig']->addTemplate($name, $context);
+        }
+    }
+
     public function render()
     {
         if ($this->hasBeenRendered) {

@@ -4,35 +4,39 @@ namespace Rareloop\Lumberjack\DebugBar\Collectors;
 
 use DebugBar\DataCollector\DataCollector;
 use DebugBar\DataCollector\Renderable;
-use Rareloop\Lumberjack\DebugBar\Twig\NodeVisitor;
+use Rareloop\Lumberjack\DebugBar\Twig\TwigDecorator;
 
 class TwigCollector extends DataCollector implements Renderable
 {
-    protected $nodeVisitor;
+    protected $templates = [];
 
     public function __construct()
     {
-        $this->nodeVisitor = new NodeVisitor;
-
         add_filter('timber/twig', [$this, 'extendTwig']);
     }
 
     public function extendTwig($twig)
     {
-        $twig->addNodeVisitor($this->nodeVisitor);
+        // Wrap the Twig instance in a decorator so that we can proxy some of the calls
+        return new TwigDecorator($twig, $this);
+    }
 
-        return $twig;
+    public function addTemplate($name, $context)
+    {
+        $this->templates[] = [
+            'name' => $name,
+            'context' => $context,
+        ];
     }
 
     public function getName()
     {
-        return 'Twig';
+        return 'twig';
     }
 
     public function collect()
     {
-        // dd($this->nodeVisitor->getIncludes());
-        $includes = collect($this->nodeVisitor->getIncludes())->map(function ($include) {
+        $includes = collect($this->templates)->map(function ($include) {
             $contextText = $include['context'];
             $contextHtml = null;
 
@@ -56,13 +60,13 @@ class TwigCollector extends DataCollector implements Renderable
                 ],
 
                 // Context
-                // [
-                //     'message' => $contextText,
-                //     'message_html' => $contextHtml,
-                //     'is_string' => false,
-                //     'label' => 'context',
-                //     'time' => microtime(),
-                // ],
+                [
+                    'message' => $contextText,
+                    'message_html' => $contextHtml,
+                    'is_string' => false,
+                    'label' => 'context',
+                    'time' => microtime(),
+                ],
             ];
         })->flatten(1)->toArray();
 
