@@ -31,5 +31,17 @@ DebugBar::warning(123);
 DebugBar::error(['foo' => 'bar']);
 ```
 
+### Timeline
+In order to write to the Timeline log you can use the `DebugBar` facade:
+
+```php
+DebugBar::startMeasure('api-fetch', 'Time for API request');
+DebugBar::stopMeasure('api-fetch');
+DebugBar::addMeasure('now', microtime(true), microtime(true) + 10000);
+DebugBar::measure('My long operation', function() {
+    // Do something…
+});
+```
+
 ### Logs
 The logs tab will mirror anything that has been output to the Lumberjack logs.

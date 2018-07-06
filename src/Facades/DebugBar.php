@@ -8,6 +8,6 @@ class DebugBar extends AbstractFacade
 {
     protected static function accessor()
     {
-        return 'debugbar.messages';
+        return 'debugbar';
     }
 }

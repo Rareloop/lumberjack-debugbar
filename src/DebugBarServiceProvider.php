@@ -18,7 +18,6 @@ class DebugBarServiceProvider extends ServiceProvider
             $debugbar = $this->app->make(DebugBar::class);
 
             $this->app->bind('debugbar', $debugbar);
-            $this->app->bind('debugbar.messages', $debugbar['messages']);
         }
     }
 
