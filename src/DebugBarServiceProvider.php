@@ -5,9 +5,11 @@ namespace Rareloop\Lumberjack\DebugBar;
 use Rareloop\Lumberjack\DebugBar\DebugBar;
 use Rareloop\Lumberjack\DebugBar\Responses\CssResponse;
 use Rareloop\Lumberjack\DebugBar\Responses\JavaScriptResponse;
+use Rareloop\Lumberjack\DebugBar\Twig\NodeVisitor;
 use Rareloop\Lumberjack\Facades\Config;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
 use Rareloop\Router\Router;
+use Timber\Timber;
 use Zend\Diactoros\Response;
 
 class DebugBarServiceProvider extends ServiceProvider
@@ -21,7 +23,7 @@ class DebugBarServiceProvider extends ServiceProvider
         }
     }
 
-    public function boot(Router $router)
+    public function boot(Router $router, Timber $timber)
     {
         if ($this->app->has('debugbar')) {
             // Attempt to add the debug bar to the footer
@@ -43,6 +45,13 @@ class DebugBarServiceProvider extends ServiceProvider
                 })->name('debugbar.css');
             });
         }
+    }
+
+    public function extendTwig($twig)
+    {
+        $twig->addNodeVisitor(new NodeVisitor);
+
+        return $twig;
     }
 
     public function echoDebugBar()

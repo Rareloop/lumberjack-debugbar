@@ -7,8 +7,10 @@ use Rareloop\Lumberjack\Application;
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\DebugBar\Collectors\LogsCollector;
 use Rareloop\Lumberjack\DebugBar\Collectors\WPDBCollector;
+use Rareloop\Lumberjack\DebugBar\Collectors\TwigCollector;
 use Rareloop\Lumberjack\DebugBar\JavaScriptRenderer;
 use Rareloop\Lumberjack\Facades\Router;
+use Timber\Timber;
 
 class DebugBar extends StandardDebugBar
 {
@@ -23,6 +25,7 @@ class DebugBar extends StandardDebugBar
 
         $this->addLogCollector();
         $this->addQueryCollector();
+        $this->addTwigCollector();
     }
 
     public function addLogCollector()
@@ -41,6 +44,13 @@ class DebugBar extends StandardDebugBar
         }
 
         $this->addCollector(new WPDBCollector());
+    }
+
+    public function addTwigCollector()
+    {
+        if ($this->app->has(Timber::class)) {
+            $this->addCollector(new TwigCollector());
+        }
     }
 
     public function render()
