@@ -56,13 +56,13 @@ class TwigCollector extends DataCollector implements Renderable
                 ],
 
                 // Context
-                [
-                    'message' => $contextText,
-                    'message_html' => $contextHtml,
-                    'is_string' => false,
-                    'label' => 'context',
-                    'time' => microtime(),
-                ],
+                // [
+                //     'message' => $contextText,
+                //     'message_html' => $contextHtml,
+                //     'is_string' => false,
+                //     'label' => 'context',
+                //     'time' => microtime(),
+                // ],
             ];
         })->flatten(1)->toArray();
 
