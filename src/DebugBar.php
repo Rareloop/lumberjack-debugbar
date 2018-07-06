@@ -8,6 +8,7 @@ use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\DebugBar\Collectors\LogsCollector;
 use Rareloop\Lumberjack\DebugBar\Collectors\WPDBCollector;
 use Rareloop\Lumberjack\DebugBar\JavaScriptRenderer;
+use Rareloop\Lumberjack\Facades\Router;
 
 class DebugBar extends StandardDebugBar
 {
@@ -52,7 +53,9 @@ class DebugBar extends StandardDebugBar
 
         $renderer = $this->getJavascriptRenderer();
 
-        return '<script type="text/javascript" src="/debugbar/js"></script><link rel="stylesheet" type="text/css" href="/debugbar/css">' . $renderer->render();
+        return  '<script type="text/javascript" src="' . rtrim(Router::url('debugbar.js'), '/') . '"></script>' .
+                '<link rel="stylesheet" type="text/css" href="' . rtrim(Router::url('debugbar.css'), '/') . '">' .
+                $renderer->render();
     }
 
     public function hasBeenRendered()

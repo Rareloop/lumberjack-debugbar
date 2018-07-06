@@ -32,33 +32,18 @@ class DebugBarServiceProvider extends ServiceProvider
             // - WP Class name issue => whitescreen
             add_action('wp_before_admin_bar_render', [$this, 'echoDebugBar']);
 
-            $router->get('debugbar/js', function () {
+            $router->group('debugbar', function ($group) {
                 $debugbar = $this->app->get('debugbar');
 
-                ob_start();
-                $debugbar->getJavascriptRenderer()->dumpJsAssets();
-                $output = ob_get_contents();
-                ob_end_clean();
+                $group->get('debugbar.js', function () use ($debugbar) {
+                    return new JavaScriptResponse($debugbar->getJavascriptRenderer()->getJsAssetsDump());
+                })->name('debugbar.js');
 
-                return new JavaScriptResponse(
-                    $output
-                );
-            });
-
-            $router->get('debugbar/css', function () {
-                $debugbar = $this->app->get('debugbar');
-
-                ob_start();
-                $debugbar->getJavascriptRenderer()->dumpCssAssets();
-                $output = ob_get_contents();
-                ob_end_clean();
-
-                return new CssResponse(
-                    $output
-                );
+                $group->get('debugbar.css', function () use ($debugbar) {
+                    return new CssResponse($debugbar->getJavascriptRenderer()->getCssAssetsDump());
+                })->name('debugbar.css');
             });
         }
-
     }
 
     public function echoDebugBar()
