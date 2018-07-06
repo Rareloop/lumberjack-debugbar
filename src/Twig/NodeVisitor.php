@@ -4,10 +4,23 @@ namespace Rareloop\Lumberjack\DebugBar\Twig;
 
 class NodeVisitor implements \Twig_NodeVisitorInterface
 {
+    protected $outerTemplateFound = false;
     protected $includes = [];
 
     public function enterNode(\Twig_Node $node, \Twig_Environment $env)
     {
+        \Rareloop\Lumberjack\DebugBar\Facades\DebugBar::info($node);
+        if ($node instanceof \Twig_Node_Module && !$this->outerTemplateFound) {
+            $name = $node->getTemplateName();
+
+            $this->includes[] = [
+                'name' => $name,
+                'context' => [],
+            ];
+
+            $this->outerTemplateFound = true;
+        }
+
         if ($node instanceof \Twig_Node_Include) {
             $context = [];
 
