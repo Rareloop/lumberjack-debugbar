@@ -2,7 +2,7 @@
 
 ## Installation
 ```
-composer require rareloop/lumberjack-debugbar --dev
+composer require rareloop/lumberjack-debugbar
 ```
 
 Once installed, register the Service Provider in config/app.php within your theme:
