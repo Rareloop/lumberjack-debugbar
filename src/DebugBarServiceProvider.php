@@ -16,7 +16,7 @@ class DebugBarServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        if (Config::get('app.debug')) {
+        if (Config::get('app.debug') && !is_admin()) {
             $debugbar = $this->app->make(DebugBar::class);
 
             $this->app->bind('debugbar', $debugbar);
