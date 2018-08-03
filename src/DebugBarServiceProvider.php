@@ -100,6 +100,8 @@ class DebugBarServiceProvider extends ServiceProvider
 
     public function echoDebugBar()
     {
+        $debugbar = $this->app->get('debugbar');
+
         if ($debugbar->hasBeenRendered()) {
             return;
         }
